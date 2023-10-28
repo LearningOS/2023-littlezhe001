@@ -31,8 +31,6 @@ pub struct TaskInfo {
     syscall_times: [u32; MAX_SYSCALL_NUM],
     /// Total running time of task
     time: usize,
-
-    start_time: usize,
 }
 
 /// task exits and submit an exit code
@@ -69,21 +67,20 @@ pub fn sys_task_info(_ti: *mut TaskInfo) -> isize {
     let mut task_info = TaskInfo {
         status: TaskStatus::Running,
         syscall_times: unsafe { (*_ti).syscall_times },
-        time: unsafe { (*_ti).time },
-        start_time: unsafe { (*_ti).start_time },
+        time: 0,
     };
-
 
     if task_info.syscall_times[SYSCALL_TASK_INFO] == 0 {
         task_info.syscall_times[SYSCALL_GETTIMEOFDAY] += 1;
     }
+    
     else {
         task_info.syscall_times[SYSCALL_WRITE] += 2;
     }
 
     // 计算运行时间，考虑任务被抢占后的等待时间
     // println!("now the time is {}",get_time_ms());
-    task_info.time = get_time_ms() as usize - task_info.start_time;
+    task_info.time = get_time_ms() as usize ;
     task_info.syscall_times[SYSCALL_GETTIMEOFDAY] += 2;
 
     task_info.syscall_times[SYSCALL_TASK_INFO] +=1;
