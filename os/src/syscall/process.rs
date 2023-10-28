@@ -89,6 +89,5 @@ pub fn sys_task_info(_ti: *mut TaskInfo) -> isize {
     unsafe {
         *_ti = task_info;
     }
-
     0
 }
