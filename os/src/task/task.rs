@@ -9,6 +9,8 @@ pub struct TaskControlBlock {
     pub task_status: TaskStatus,
     /// The task context
     pub task_cx: TaskContext,
+    /// 初始化时间，用于记录任务的初始化时间戳
+    pub init_time: usize,
 }
 
 /// The status of a task
